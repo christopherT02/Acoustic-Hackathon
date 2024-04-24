@@ -43,6 +43,36 @@ class Misc:
         plt.legend()
         plt.show()
 
+    def visualize_and_extract_spectrogram(self, data, microphone_index, sample_index, title=None):
+        # Select the specific microphone's data
+        microphone_data = data[sample_index, microphone_index, :]
+
+        # Filtering
+        # filtered_signal = signal.medfilt(microphone_data, kernel_size=3)  # Uncomment for median filtering
+
+        # Normalization
+        normalized_signal = librosa.util.normalize(microphone_data)
+
+        # Resampling
+        # resampled_signal = librosa.resample(normalized_signal, orig_sr=48000, target_sr=16000)  # Maintain original fs
+
+        # Mel spectrogram
+        mel_spectrogram = librosa.feature.melspectrogram(y=normalized_signal, sr=48000)
+
+        # Extract MFCCs
+        mfccs = librosa.feature.mfcc(y=normalized_signal, sr=48000, n_mfcc=20)  # Extract 20 MFCCs
+
+        print("Mel spectrogram shape:", mel_spectrogram.shape)
+
+        fig, ax = plt.subplots()
+        S_dB = librosa.power_to_db(mel_spectrogram, ref=np.max)
+        img = librosa.display.specshow(S_dB, x_axis='time', y_axis='mel', sr=48000, ax=ax)
+        fig.colorbar(img, ax=ax, format='%+2.0f dB')
+        ax.set(title=title if title is not None else 'Mel-frequency spectrogram')
+        plt.show()
+
+        return mel_spectrogram, mfccs
+
     def preprocess(self, deconvoled_trim):
         preprocessed_data_mfcc = []
         preprocessed_data_rms = []
