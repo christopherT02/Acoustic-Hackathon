@@ -75,11 +75,13 @@ class Misc:
 
     def preprocess(self, deconvoled_trim):
         preprocessed_data_mfcc = []
+        preprocessed_data_mel = []
         preprocessed_data_rms = []
         preprocessed_data_zcr = []
 
         for instance_index in tqdm(range(deconvoled_trim.shape[0])):
             instance_data_mfcc = []
+            instance_data_mel = []
             instance_data_zcr = []
             instance_data_rms = []
             for channel_index in range(deconvoled_trim.shape[1]):
@@ -105,19 +107,22 @@ class Misc:
                 zero_crossing_rate = librosa.feature.zero_crossing_rate(y=normalized_signal)
 
                 instance_data_mfcc.append(mfcc_features)
+                instance_data_mel.append(mel_features)
                 instance_data_zcr.append(zero_crossing_rate)
                 instance_data_rms.append(rms_features)
 
             preprocessed_data_mfcc.append(instance_data_mfcc)
+            preprocessed_data_mel.append(instance_data_mel)
             preprocessed_data_rms.append(instance_data_rms)
             preprocessed_data_zcr.append(instance_data_zcr)
 
         preprocessed_data_mfcc = np.array(preprocessed_data_mfcc)
+        preprocessed_data_mel = np.array(preprocessed_data_mel)
         preprocessed_data_rms = np.array(preprocessed_data_rms)
         preprocessed_data_zcr = np.array(preprocessed_data_zcr)
-        return preprocessed_data_mfcc, preprocessed_data_rms, preprocessed_data_zcr
+        return preprocessed_data_mfcc, preprocessed_data_rms, preprocessed_data_zcr, preprocessed_data_mel
 
-    def plot_audio_features(self, instance_index, chan_index, mfcc=[], rms_features=[], zcr=[]):
+    def plot_audio_features(self, instance_index, chan_index, mfcc=[], mel=[], rms_features=[], zcr=[]):
         if len(mfcc) > 0:
             # Plot MFCC features
             plt.figure(figsize=(10, 4))
@@ -152,3 +157,13 @@ class Misc:
                 plt.legend()
                 plt.tight_layout()
                 plt.show()
+
+        if len(mel) > 0:
+            plt.figure(figsize=(10, 4))
+            plt.imshow(mel, cmap='viridis', origin='lower', aspect='auto')
+            plt.xlabel('Time (frame)')
+            plt.ylabel('Mel Frequency')
+            plt.title('Mel Spectrogram (Instance {}, Channel {})'.format(instance_index+1, chan_index+1))
+            plt.colorbar(label='Magnitude (dB)')
+            plt.tight_layout()
+            plt.show()

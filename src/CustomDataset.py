@@ -4,14 +4,17 @@ import numpy as np
 
 
 class CustomDataset(Dataset):
-    def __init__(self, coordinates, preprocessed_data_mfcc=[], _type="rms", preprocessed_data_rms=[], preprocessed_data_zcr=[]):
+    def __init__(self, coordinates, preprocessed_data_mfcc=[], preprocessed_data_mel=[], _type="rms", preprocessed_data_rms=[], preprocessed_data_zcr=[]):
         self.preprocessed_data_mfcc = preprocessed_data_mfcc
         self.preprocessed_data_rms = preprocessed_data_rms
         self.preprocessed_data_zcr = preprocessed_data_zcr
+        self.preprocessed_data_mel = preprocessed_data_mel
         self.coordinates = coordinates
         self.type = _type
         if self.type == "rms":
             print("RMS: ", preprocessed_data_rms.shape)
+        elif self.type == "mel":
+            print("MEL: ", preprocessed_data_mel.shape)
         elif self.type == "zcr":
             print("ZCR: ", preprocessed_data_zcr.shape)
         elif self.type == "mfcc":
