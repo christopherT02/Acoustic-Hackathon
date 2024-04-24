@@ -13,6 +13,10 @@ class Misc:
         self.target_sr = target_sr
 
     def euclidean_distance(self, pred_coords, true_coords):
+        if pred_coords.requires_grad:
+            pred_coords = pred_coords.detach().numpy()
+        if true_coords.requires_grad:
+            true_coords = true_coords.detach().numpy()
         if not isinstance(pred_coords, np.ndarray):
             pred_coords = pred_coords.numpy()
         if not isinstance(true_coords, np.ndarray):
