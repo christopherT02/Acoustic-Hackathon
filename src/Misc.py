@@ -99,19 +99,22 @@ class Misc:
                 filtered_signal = signal.medfilt(focused_signal, kernel_size=3)
 
                 normalized_signal = librosa.util.normalize(filtered_signal)
+                
+                resampled_signal = librosa.resample(normalized_signal, orig_sr=self.sr, target_sr=self.target_sr)
 
                 mel_features = librosa.feature.melspectrogram(
-                    y=normalized_signal,
+                    y=resampled_signal,
                     sr=self.target_sr,
                     n_fft=2048,
                     hop_length=512,
                     n_mels=128
                 )
+                
                 mfcc_features = librosa.feature.mfcc(S=librosa.power_to_db(mel_features))
 
-                rms_features = np.sqrt(np.mean(normalized_signal ** 2))
+                rms_features = np.sqrt(np.mean(resampled_signal ** 2))
 
-                zero_crossing_rate = librosa.feature.zero_crossing_rate(y=normalized_signal)
+                zero_crossing_rate = librosa.feature.zero_crossing_rate(y=resampled_signal)
 
                 instance_data_mfcc.append(mfcc_features)
                 instance_data_mel.append(mel_features)
