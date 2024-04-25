@@ -27,29 +27,33 @@
     <li>
       <a href="#model-presentation">Models Presentation</a>
       <ul>
-        <li><a href="#linear-regression">Built With</a></li>
-        <li><a href="#k-nearest-neighbors-(knn)">Built With</a></li>
-        <li><a href="#random-forest">Built With</a></li>
-        <li><a href="#vggish-pretrained">Built With</a></li>
+        <li><a href="#linear-regression">Linear Regression</a></li>
+        <li><a href="#k-nearest-neighbors-(knn)">K-Nearest Neighbors (KNN)</a></li>
+        <li><a href="#random-forest">Random Forest</a></li>
+        <li><a href="#vggish-pretrained">VGGish Pretrained</a></li>
       </ul>
     </li>
   </ol>
 </details>
 
+<a name="about-the-project"></a>
 ## About The Project
 
 This project aims to develop a method for human localization using room acoustics and multimodal analysis. The proposed method will utilize audio data to accurately estimate the position of individuals within a room.
 
+<a name="built-with"></a>
 ### Built With
 * [Jupyter Notebook](https://jupyter.org/)
 * [Python](https://www.python.org/)
 * [Pytorch](https://pytorch.org/)
 * [Librosa](https://librosa.org/)
 
+<a name="getting-started"></a>
 ## Getting Started
 
 This is the order in which each of the jupyter notebook need to be used in order to use our Models.
 
+<a name="how-to-use"></a>
 ### How to use
 
 1. Open the ```download_dataset.ipynb``` and run all the cells.
@@ -63,7 +67,9 @@ This step is to download the Dataset locally and access it easily.
 - ```VGGish_pretrained.ipynb``` - A voir
 
 3.  (Optional) You can open ```visuals.ipynb``` and run all the cells to visualize the dataset
-### Dataset Presentation
+
+<a name="dataset-presentation"></a>
+## Dataset Presentation
 
 The dataset consists of three folders: Empty, Human 1, and Human 2.
 
@@ -79,20 +85,25 @@ The dataset consists of three folders: Empty, Human 1, and Human 2.
     - deconvoled_trim.wav: This file contains the audio signal after it has been deconvolved from the room reverberation.
     - skeletons.txt: This file contains the skeletal data of the human, which is not used in this dataset.
 
-### Models Presentation
+<a name="model-presentation"></a>
+## Models Presentation
 
-#### Linear Regression
+<a name="linear-regression"></a>
+### Linear Regression
 
 Linear regression is a statistical model that attempts to model the relationship between two or more variables by fitting a linear equation to observed data.
 
-#### K-Nearest Neighbors (KNN)
+<a name="k-nearest-neighbors-(knn)"></a>
+### K-Nearest Neighbors (KNN)
 
 KNN is a non-parametric algorithm for classification and regression. In classification, KNN classifies a new data point based on the majority class of its k nearest neighbors in the training data. In regression, KNN predicts the value of a new data point based on the average value of its k nearest neighbors in the training data.
 
-#### Random Forest
+<a name="random-forest"></a>
+### Random Forest
 
 Random forest is an ensemble learning method that combines multiple decision trees to make more accurate predictions. The final prediction is made by averaging the predictions of all the trees in the forest.
 
-#### VGGish Pretrained
+<a name="vggish-pretrained"></a>
+### VGGish Pretrained
 
 VGGish is a pre-trained convolutional neural network (CNN) model for audio feature extraction. It is trained on a massive dataset of audio clips with labels, and it is able to extract high-level features from audio signals.
