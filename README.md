@@ -64,7 +64,6 @@ This step is to download the Dataset locally and access it easily.
 - ```knn.ipynb```
 - ```vgg.ipynb```
 - ```random_forest.ipynb```
-- ```VGGish_pretrained.ipynb``` - A voir
 
 3.  (Optional) You can open ```visuals.ipynb``` and run all the cells to visualize the dataset
 
