@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import signal
 from tqdm import tqdm
-
+import torch
+from EuclideanDistanceLoss import EuclideanDistanceLoss
 
 class Misc:
     def __init__(self, start_time=0, end_time=50000, sr=44100, target_sr=16000):
@@ -22,6 +23,12 @@ class Misc:
         if not isinstance(true_coords, np.ndarray):
             pred_coords = true_coords.numpy()
         return np.sqrt(np.sum((pred_coords - true_coords)**2))
+
+    def custom_scoring(self, estimator, X, y):
+        EUCLIDEAN_LOSS = EuclideanDistanceLoss()
+        pred_coords = estimator.predict(X)
+        ed = np.mean([EUCLIDEAN_LOSS(torch.tensor(p), torch.tensor(t)) for p, t in zip(pred_coords, y)])
+        return -ed
 
     def display_loss(self, centroids, predicted_coords):
         all_true_coords = centroids.reshape(-1, 2)
@@ -123,35 +130,29 @@ class Misc:
         return preprocessed_data_mfcc, preprocessed_data_rms, preprocessed_data_zcr, preprocessed_data_mel
 
     def preprocess_knn(self, deconvoled_trim):
-        preprocessed_data_mfcc = []
         preprocessed_data_rms = []
         preprocessed_data_zcr = []
         
         for instance_index in tqdm(range(deconvoled_trim.shape[0])):
-            instance_data_mfcc = []
             instance_data_zcr = []
             instance_data_rms = []
             for channel_index in range(deconvoled_trim.shape[1]):
                 filtered_signal = signal.medfilt(deconvoled_trim[instance_index, channel_index, :], kernel_size=3)
                 normalized_signal = librosa.util.normalize(filtered_signal)
-                
-                mfcc_features = librosa.feature.mfcc(y=deconvoled_trim[instance_index, channel_index, :], sr=16000, n_mfcc=13)
+
                 rms_features = np.sqrt(np.mean(deconvoled_trim[instance_index, channel_index, :]**2))
                 zero_crossing_rate = librosa.feature.zero_crossing_rate(y=deconvoled_trim[instance_index, channel_index, :])
-                
-                instance_data_mfcc.append(mfcc_features)
+        
                 instance_data_zcr.append(zero_crossing_rate)
                 instance_data_rms.append(rms_features)
-            
-            preprocessed_data_mfcc.append(instance_data_mfcc)
+
             preprocessed_data_rms.append(instance_data_rms)
             preprocessed_data_zcr.append(instance_data_zcr)
-        
-        preprocessed_data_mfcc = np.array(preprocessed_data_mfcc)
+    
         preprocessed_data_rms = np.array(preprocessed_data_rms)
         preprocessed_data_zcr = np.array(preprocessed_data_zcr)
 
-        return preprocessed_data_mfcc, preprocessed_data_rms, preprocessed_data_zcr
+        return preprocessed_data_rms, preprocessed_data_zcr
 
     def plot_audio_features(self, instance_index, chan_index, mfcc=[], mel=[], rms_features=[], zcr=[]):
         if len(mfcc) > 0:
