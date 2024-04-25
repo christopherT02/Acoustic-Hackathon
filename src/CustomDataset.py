@@ -4,13 +4,14 @@ import numpy as np
 
 
 class CustomDataset(Dataset):
-    def __init__(self, coordinates, preprocessed_data_mfcc=[], preprocessed_data_mel=[], _type="rms", preprocessed_data_rms=[], preprocessed_data_zcr=[]):
+    def __init__(self, coordinates, preprocessed_data_mfcc=[], preprocessed_data_mel=[], _type="rms", preprocessed_data_rms=[], preprocessed_data_zcr=[], nb_mics=1):
         self.preprocessed_data_mfcc = preprocessed_data_mfcc
         self.preprocessed_data_rms = preprocessed_data_rms
         self.preprocessed_data_zcr = preprocessed_data_zcr
         self.preprocessed_data_mel = preprocessed_data_mel
         self.coordinates = coordinates
         self.type = _type
+        self.nb_mics = nb_mics
         if self.type == "rms":
             print("RMS: ", preprocessed_data_rms.shape)
         elif self.type == "mel":
@@ -30,7 +31,7 @@ class CustomDataset(Dataset):
             rms = torch.tensor(rms, dtype=torch.float32)
             return np.array(rms), coordinates
         elif self.type == "mfcc":
-            mfcc = [torch.tensor(self.preprocessed_data_mfcc[idx, mic_index], dtype=torch.float32) for mic_index in range(4)]
+            mfcc = [torch.tensor(self.preprocessed_data_mfcc[idx, mic_index], dtype=torch.float32) for mic_index in range(self.nb_mics)]
             return np.array(mfcc), coordinates
         elif self.type == "zcr":
             zcr = torch.tensor(self.preprocessed_data_zcr[idx], dtype=torch.float32) if self.preprocessed_data_zcr else None
